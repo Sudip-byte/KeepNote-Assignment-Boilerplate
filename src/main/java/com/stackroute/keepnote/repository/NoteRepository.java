@@ -1,5 +1,7 @@
 package com.stackroute.keepnote.repository;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.stackroute.keepnote.model.Note;
@@ -14,22 +16,26 @@ public class NoteRepository {
 
 	/* Declare a variable called "list" to store all the notes. */
 
+	private List<Note> list;
+
 	public NoteRepository() {
 
 		/* Initialize the variable using proper data type */
+		list = new ArrayList<Note>();
 	}
 
 	/* This method should return all the notes in the list */
 
 	public List<Note> getList() {
-		return null;
+		return list;
 	}
 
 	/* This method should set the list variable with new list of notes */
 
 	public void setList(List<Note> list) {
-
+		this.list = list;
 	}
+
 
 	/*
 	 * This method should Note object as argument and add the new note object into
@@ -38,13 +44,31 @@ public class NoteRepository {
 
 	public void addNote(Note note) {
 
+		if(list.contains(note))
+		{
+			list.remove(note);
+			exists(note.getNoteId());
+		}
+		list.add(note);
+
 	}
 
 	/* This method should deleted a specified note from the list */
 
 	public boolean deleteNote(int noteId) {
 		/* Use list iterator to find matching note id and remove it from the list */
-		return false;
+
+		Iterator<Note> iterator = this.list.iterator();
+		boolean status = false;
+		while (iterator.hasNext())
+		{
+			Note note = (Note)iterator.next();
+			if (note.getNoteId() == noteId) {
+				iterator.remove();
+				status = true;
+			}
+		}
+		return status;
 		
 		
 	}
@@ -52,7 +76,7 @@ public class NoteRepository {
 	/* This method should return the list of notes */
 
 	public List<Note> getAllNotes() {
-		return null;
+		return this.list;
 	}
 
 	/*
@@ -62,6 +86,14 @@ public class NoteRepository {
 	 */
 
 	public boolean exists(int noteId) {
-		return false;
+
+		boolean status = false;
+
+		for(Note note : this.list) {
+			if(note.getNoteId() == noteId) {
+				status = true;
+			}
+		}
+		return status;
 	}
 }
